@@ -70,8 +70,8 @@ def output_ner_predictions(model, batches, dataset, output_file):
         js[i] = doc
 
     logger.info('Output predictions to %s..'%(output_file))
-    with open(output_file, 'w') as f:
-        f.write('\n'.join(json.dumps(doc, cls=NpEncoder) for doc in js))
+    with open(output_file, 'w', encoding="utf-8") as f:
+        f.write('\n'.join(json.dumps(doc, cls=NpEncoder, ensure_ascii=False) for doc in js))
 
 def evaluate(model, batches, tot_gold):
     """
@@ -116,7 +116,7 @@ def setseed(seed):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--task', type=str, default=None, required=True, choices=['ace04', 'ace05', 'scierc'])
+    parser.add_argument('--task', type=str, default=None, required=True, choices=['ace04', 'ace05', 'scierc', 'finance', 'baidu', 'finance_ner','news'])
 
     parser.add_argument('--data_dir', type=str, default=None, required=True, 
                         help="path to the preprocessed dataset")
@@ -125,9 +125,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--max_span_length', type=int, default=8, 
                         help="spans w/ length up to max_span_length are considered as candidates")
-    parser.add_argument('--train_batch_size', type=int, default=32, 
+    parser.add_argument('--train_batch_size', type=int, default=8,
                         help="batch size during training")
-    parser.add_argument('--eval_batch_size', type=int, default=32, 
+    parser.add_argument('--eval_batch_size', type=int, default=8,
                         help="batch size during inference")
     parser.add_argument('--learning_rate', type=float, default=1e-5, 
                         help="learning rate for the BERT encoder")
@@ -195,6 +195,7 @@ if __name__ == '__main__':
 
     dev_data = Dataset(args.dev_data)
     dev_samples, dev_ner = convert_dataset_to_samples(dev_data, args.max_span_length, ner_label2id=ner_label2id, context_window=args.context_window)
+    #dev_samples = convert_dataset_to_samples(dev_data, args.max_span_length, ner_label2id=ner_label2id, context_window=args.context_window)
     dev_batches = batchify(dev_samples, args.eval_batch_size)
 
     if args.do_train:
@@ -212,7 +213,6 @@ if __name__ == '__main__':
         optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, correct_bias=not(args.bertadam))
         t_total = len(train_batches) * args.num_epoch
         scheduler = get_linear_schedule_with_warmup(optimizer, int(t_total*args.warmup_proportion), t_total)
-        
         tr_loss = 0
         tr_examples = 0
         global_step = 0
@@ -250,11 +250,11 @@ if __name__ == '__main__':
         model = EntityModel(args, num_ner_labels=num_ner_labels)
         if args.eval_test:
             test_data = Dataset(args.test_data)
-            prediction_file = os.path.join(args.output_dir, args.test_pred_filename)
+            prediction_file = os.path.join(args.data_dir, args.test_pred_filename)
         else:
             test_data = Dataset(args.dev_data)
-            prediction_file = os.path.join(args.output_dir, args.dev_pred_filename)
+            prediction_file = os.path.join(args.data_dir, args.dev_pred_filename)
         test_samples, test_ner = convert_dataset_to_samples(test_data, args.max_span_length, ner_label2id=ner_label2id, context_window=args.context_window)
         test_batches = batchify(test_samples, args.eval_batch_size)
-        evaluate(model, test_batches, test_ner)
+        # evaluate(model, test_batches, test_ner)
         output_ner_predictions(model, test_batches, test_data, output_file=prediction_file)

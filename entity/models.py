@@ -222,7 +222,6 @@ class EntityModel():
             tokens = sample['tokens']
             spans = sample['spans']
             spans_ner_label = sample['spans_label']
-
             tokens_tensor, bert_spans_tensor, spans_ner_label_tensor = self._get_input_tensors(tokens, spans, spans_ner_label)
             tokens_tensor_list.append(tokens_tensor)
             bert_spans_tensor_list.append(bert_spans_tensor)

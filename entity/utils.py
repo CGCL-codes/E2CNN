@@ -9,7 +9,7 @@ def batchify(samples, batch_size):
     Batchfy samples with a batch size
     """
     num_samples = len(samples)
-
+    print(samples[0])
     list_samples_batches = []
     
     # if a sentence is too long, make itself a batch to avoid GPU OOM
@@ -127,7 +127,7 @@ def convert_dataset_to_samples(dataset, max_span_length, ner_label2id=None, cont
     logger.info('Extracted %d samples from %d documents, with %d NER labels, %.3f avg input length, %d max length'%(len(samples), data_range[1]-data_range[0], num_ner, avg_length, max_length))
     logger.info('Max Length: %d, max NER: %d'%(max_len, max_ner))
     return samples, num_ner
-
+    #return samples
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.integer):
