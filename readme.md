@@ -1,5 +1,5 @@
 # Cascaded Pointer Networks for Financial Hyper-Relation Extraction with Entity Types
-Source code of the xxxx paper "Cascaded Pointer Networks for Financial Hyper-Relation Extraction with Entity Types"
+Source code of the xxxx paper "E2CNN:Entity-Type-Enriched Cascaded Neural Network for Financial Hyper-Relation Extraction"
 
 ## Overview
 ![](./figs/overview.png)
@@ -139,3 +139,4 @@ The prediction results will be stored in the file `result.json` in the folder `.
 If you use our code in your research, please cite our work:
 
 ## Support or Contact
+E2CNN is developed in National Engineering Research Center for Big Data Technology and System, Cluster and Grid Computing Lab, Services Computing Technology and System Lab, School of Computer Science and Technology, Huazhong University of Science and Technology, Wuhan, China by Mengfan Li(limf@hust.edu.cn), Xuanhua Shi(xhshi@hust.edu.cn), Chenqi Qiao(qiaocq@hust.edu.cn), Weihao Wang(whwang2020@hust.edu.cn), Yao Wan(wanyao@hust.edu.cn), Hai Jin(hjin@hust.edu.cn) and Department of Computing, The Hong Kong Polytechnic University by Xiao Huang(xiaohuang@comp.polyu.edu.hk)
