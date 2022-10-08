@@ -17,9 +17,14 @@ Please install all the dependency packages using the following command:
 ```
 pip install -r requirements.txt
 ```
-### pretrained models
+### Pretrained models
 Pretrained models need to be installed and placed in `./pretrain_models` as the base transformer model.We use `chinese-roberta-wwm-ext` as default base model for chinese dataset.
-
+### Dataset
+Our pre-trained model is based on the Chinese financial corpus FinCorpus.CN, and other open datasets mentioned in the paper are available at
+```
+DUIE:http://ai.baidu.com/broad/introduction
+CLUENER2020:https://github.com/CLUEbenchmark/CLUENER2020
+```
 ## NER model
 
 ### Input data format for NER model
@@ -60,7 +65,7 @@ The input data format of the NER model is JSONL. Each line of the input file con
 ### Train/evaluate a NER model
 
 You can use `run_entity.py` with `--do_train` to train a NER model and with `--do_eval` to evaluate a NER model. 
-The following commands can be used to train a NER models on FCAR:
+The following commands can be used to train a NER models on FinCorpus.CN:
 ```
 CUDA_VISIBLE_DEVICES=0 \
  python run_entity.py \
@@ -68,8 +73,8 @@ CUDA_VISIBLE_DEVICES=0 \
 --learning_rate=1e-5 \
 --task finance \
 --model ./pretrain_models/chinese-roberta-wwm-ext \
- --data_dir ./entity_data/FCAR \
---output_dir entity_output/finance_crosslabel_tokenize_100epoch \
+ --data_dir ./entity_data/FinCorpus.CN \
+--output_dir entity_output/FinCorpus.CN \
 --context_window 0 --num_epoch 100 --max_span_length 26
 ```
 Aruguments:
@@ -108,15 +113,15 @@ The input data format of the relation model is JSONL. Each line of the input fil
 You can use following commands to convert the data format for NER model to data for RE model.
 ```
 python entity_data/analyze_data/prediction2relation.py \
---pred_dir entity_data/FCAR/ \
---output_dir relation_data/FCAR/ 
+--pred_dir entity_data/FinCorpus.CN/ \
+--output_dir relation_data/FinCorpus.CN/ 
 ``` 
 Aruguments:
 * `--pred_dir`:the directory of entity model prediction files.In order to classify relationships based on predicted entities,ent_pred_test.json and ent_pred_dev.json should be included.
 * `--output_dir`:the output directory of the dataset.And the directory will be the input directory of relation model.
 Besides,The entity types and relationship types involved in the dataset need to be predefined in JSONL files(entity.json, rel.json) and placed in the dataset folder.
 
-### Train/evaluate a relation model 
+### Train a relation model 
 You can train the relational model with the default configuration by using `run_relation.py`
 A trianing command template is as follow:
 ```
@@ -125,7 +130,7 @@ python run_relation.py \
 --batch_size 4 \
 --max_epoch 10 \
 --max_len 300 \
---dataset FCAR \
+--dataset FinCorpus.CN \
 --bert_name './pretrain_models/chinese-roberta-wwm-ext' \
 --bert_dim 768 
 ```
@@ -134,6 +139,13 @@ Aruguments:
 * `--bert_name`:the base transformer model.We use `chinese-roberta-wwm-ext` for chinese dataset.
 Other configurations can be viewed and modified in `./relation/config.py`
 The prediction results will be stored in the file `result.json` in the folder `./results/`
+
+### Evaluate a relation model 
+You can use the following commands to evaluate the trained model
+```
+python Evaluate.py \
+--dataset FinCorpus.CN
+```
 
 ## Citation
 If you use our code in your research, please cite our work:

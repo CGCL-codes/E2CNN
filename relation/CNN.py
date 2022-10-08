@@ -5,9 +5,9 @@ from transformers import BertModel, BertTokenizer
 from relation.data import add_marker_tokens
 
 
-class CasRel(nn.Module):
+class CNN(nn.Module):
     def __init__(self, config):
-        super(CasRel, self).__init__()
+        super(CNN, self).__init__()
         self.config = config
         self.bert = BertModel.from_pretrained(self.config.bert_name)
         self.entity_type = json.load(open(config.entity_path, 'r'))

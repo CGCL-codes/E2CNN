@@ -2,7 +2,7 @@ import argparse
 import os
 import torch
 import torch.optim as optim
-from relation.casRel import CasRel
+from relation.CNN import CNN
 from relation.callback import MyCallBack
 from relation.data import load_data, get_data_iterator
 from relation.config import Config
@@ -19,7 +19,7 @@ parser.add_argument('--lr', type=float, default=1e-5, help='learning rate')
 parser.add_argument('--batch_size', type=int, default=4)
 parser.add_argument('--max_epoch', type=int, default=10)
 parser.add_argument('--max_len', type=int, default=300)
-parser.add_argument('--dataset', default='FCAR', type=str, help='define your own dataset names')
+parser.add_argument('--dataset', default='FinCorpus.CN', type=str, help='define your own dataset names')
 parser.add_argument("--bert_name", default='./pretrain_models/chinese-roberta-wwm-ext', type=str, help='choose pretrained bert name')
 parser.add_argument('--bert_dim', default=768, type=int)
 args = parser.parse_args()
@@ -52,7 +52,7 @@ class MyLoss(LossBase):
 
 
 if __name__ == '__main__':
-    model = CasRel(con).to(device)
+    model = CNN(con).to(device)
     data_bundle, rel_vocab = load_data(con.train_path, con.dev_path, con.test_path, con.rel_path)
     train_data = get_data_iterator(con, data_bundle.get_dataset('train'), rel_vocab)
     dev_data = get_data_iterator(con, data_bundle.get_dataset('dev'), rel_vocab, is_test=True)
