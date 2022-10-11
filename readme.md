@@ -9,7 +9,6 @@ In this work, we present a cascaded pointer networks approach for financial hype
 1. NER model: Adopt a span-level entity extraction strategy which perform entity type prediction on all possible spans, effectively solving the problem of identifying nested entities in financial texts.
 2. RE model: Adopt a cascaded pointer network relation extraction model fused with entity tags to make full use of the entity type feature.The network firstly extracts the relationship subject, then jointly extracts the relationship object and relationship type, which effectively solves the extraction of complex relationship types.
 
-Please find more details of this work in our paper.
 
 ## Setup
 ### Requirements
